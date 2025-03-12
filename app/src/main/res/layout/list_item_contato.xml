@@ -7,7 +7,7 @@
     android:background="@android:color/white"
     android:gravity="center_vertical">
 
-    <!-- Layout para Nome e Telefone -->
+    <!-- Layout para Nome, Telefone e E-mail -->
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -32,13 +32,22 @@
             android:text="Telefone"
             android:textSize="16sp"
             android:textColor="#666666" />
+
+        <!-- E-mail -->
+        <TextView
+            android:id="@+id/tvEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Email"
+            android:textSize="14sp"
+            android:textColor="#444444" />
     </LinearLayout>
 
     <!-- Botão de exclusão com ícone de lixeira -->
     <ImageButton
         android:id="@+id/btnExcluir"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:src="@android:drawable/ic_delete"
         android:contentDescription="Excluir contato"
@@ -48,8 +57,8 @@
     <!-- Botão de edição com ícone de lápis -->
     <ImageButton
         android:id="@+id/btnEditar"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:src="@android:drawable/ic_menu_edit"
         android:contentDescription="Editar contato"

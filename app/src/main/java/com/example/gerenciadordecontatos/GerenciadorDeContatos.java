@@ -1,84 +1,62 @@
 package com.example.gerenciadordecontatos;
 
 import android.content.Context;
-import java.util.ArrayList;
 import java.util.List;
 
 public class GerenciadorDeContatos {
 
-    private List<Contato> contatos;
+    private ContatoDatabaseHelper dbHelper;
 
-    // Construtor da classe, inicializa a lista de contatos
+    // Construtor da classe, inicializa o banco de dados
     public GerenciadorDeContatos(Context context) {
-        contatos = new ArrayList<>();
-        // Aqui você pode inicializar a lista de contatos com dados preexistentes se necessário
+        dbHelper = new ContatoDatabaseHelper(context);  // Inicializa o helper do banco de dados
     }
 
     // Método para adicionar um contato
-    public void adicionarContato(String nome, String telefone, String email) {
+    public boolean adicionarContato(String nome, String telefone, String email) {
+        // Verifica se o número já existe no banco de dados
+        Contato contatoExistente = dbHelper.obterContatoPorTelefone(telefone);
+
+        if (contatoExistente != null) {
+            // Retorna falso se o número já estiver cadastrado
+            return false;
+        }
+
+        // Se não existe, adiciona o novo contato
         Contato contato = new Contato(nome, telefone, email);
-        contatos.add(contato);
+        dbHelper.adicionarContato(contato);
+        return true;
     }
 
+
     // Método para editar um contato
-    public boolean editarContato(int position, String nome, String telefone, String email) {
-        if (position >= 0 && position < contatos.size()) {
-            Contato contato = contatos.get(position);
-            contato.setNome(nome);
-            contato.setTelefone(telefone);
-            contato.setEmail(email);
-            return true;
-        }
-        return false;
+    public boolean editarContato(int id, String nome, String telefone, String email) {
+        Contato contato = new Contato(id, nome, telefone, email); // Passando 4 parâmetros para o construtor
+        return dbHelper.atualizarContato(contato);  // Edita no banco de dados
     }
 
     // Método para remover um contato
-    public boolean removerContato(int position) {
-        if (position >= 0 && position < contatos.size()) {
-            contatos.remove(position);
-            return true;
-        }
-        return false;
+    public boolean removerContato(int id) {
+        return dbHelper.excluirContato(id);  // Remove do banco de dados
     }
 
     // Método para listar todos os contatos
     public List<Contato> getContatos() {
-        return contatos;
+        return dbHelper.obterTodosContatos();  // Recupera todos os contatos do banco de dados
     }
 
-
-// Método para buscar contatos com base no termo de busca
+    // Método para buscar contatos com base no termo de busca
     public List<Contato> buscarContato(String termoBusca) {
-        List<Contato> resultado = new ArrayList<>();
-
-        // Se o termo de busca não for nulo ou vazio, faz a busca
-        if (termoBusca != null && !termoBusca.trim().isEmpty()) {
-            String termoBuscaLower = termoBusca.toLowerCase(); // Transformar o termo de busca para minúsculas
-            for (Contato contato : contatos) {
-                // Verifica se o nome ou telefone contém o termo de busca, ignorando maiúsculas/minúsculas
-                if (contato.getNome().toLowerCase().contains(termoBuscaLower) ||
-                        contato.getTelefone().toLowerCase().contains(termoBuscaLower)) {
-                    resultado.add(contato);
-                }
-            }
-        }
-
-        return resultado;
+        return dbHelper.buscarContatos(termoBusca);  // Pesquisa no banco de dados
     }
 
-
-    // Método para obter um contato específico pelo índice
-    public Contato getContato(int position) {
-        if (position >= 0 && position < contatos.size()) {
-            return contatos.get(position);
-        }
-        return null;
+    // Método para obter um contato específico pelo ID
+    public Contato getContato(int id) {
+        return dbHelper.obterContatoPorId(id);  // Busca no banco de dados pelo ID
     }
 
-    // Método para limpar a lista de contatos
+    // Método para limpar a lista de contatos (não aplicável no banco de dados, pois a exclusão é individual)
     public void limparContatos() {
-        contatos.clear();
+        dbHelper.limparContatos();  // Limpa o banco de dados
     }
-
-
 }

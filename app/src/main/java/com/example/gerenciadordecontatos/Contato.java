@@ -1,21 +1,31 @@
 package com.example.gerenciadordecontatos;
 
-import android.os.Parcel;
-import android.os.Parcelable;
+import java.io.Serializable;
 
-public class Contato implements Parcelable {
+public class Contato implements Serializable {
+    private static final long serialVersionUID = 1L;  // ID de versão para garantir a compatibilidade
+
     private String nome;
     private String telefone;
     private String email;
+    private int id;  // Novo campo para o ID
 
-    // Construtor
+    // Construtor com ID (para quando já tiver o ID, como na edição)
+    public Contato(int id, String nome, String telefone, String email) {
+        this.id = id;
+        this.nome = nome;
+        this.telefone = telefone;
+        this.email = email;
+    }
+
+    // Construtor sem ID (para quando adicionar um novo contato, o ID será atribuído automaticamente pelo banco)
     public Contato(String nome, String telefone, String email) {
         this.nome = nome;
         this.telefone = telefone;
         this.email = email;
     }
 
-    // Getters e setters
+    // Getters
     public String getNome() {
         return nome;
     }
@@ -28,6 +38,11 @@ public class Contato implements Parcelable {
         return email;
     }
 
+    public int getId() {  // Método getter para o ID
+        return id;
+    }
+
+    // Setters
     public void setNome(String nome) {
         this.nome = nome;
     }
@@ -40,36 +55,13 @@ public class Contato implements Parcelable {
         this.email = email;
     }
 
-    // Métodos para implementar Parcelable
+    public void setId(int id) {  // Método setter para o ID
+        this.id = id;
+    }
+
+    // Método toString para facilitar a visualização do contato
     @Override
-    public int describeContents() {
-        return 0;
+    public String toString() {
+        return "Contato{id=" + id + ", nome='" + nome + "', telefone='" + telefone + "', email='" + email + "'}";
     }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(nome);
-        dest.writeString(telefone);
-        dest.writeString(email);
-    }
-
-    // Construtor que cria o objeto a partir do Parcel
-    protected Contato(Parcel in) {
-        nome = in.readString();
-        telefone = in.readString();
-        email = in.readString();
-    }
-
-    // Criador necessário para a classe Parcelable
-    public static final Creator<Contato> CREATOR = new Creator<Contato>() {
-        @Override
-        public Contato createFromParcel(Parcel in) {
-            return new Contato(in);
-        }
-
-        @Override
-        public Contato[] newArray(int size) {
-            return new Contato[size];
-        }
-    };
 }

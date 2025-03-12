@@ -24,6 +24,10 @@
 
         <!-- Adicionando a ListarContatosActivity -->
         <activity android:name=".ListarContatosActivity" />
+
+        <!-- Adicionando a EditarContatoActivity -->
+        <activity android:name=".EditarContatoActivity" />
+
     </application>
 
 </manifest>
